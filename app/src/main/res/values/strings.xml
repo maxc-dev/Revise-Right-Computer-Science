@@ -11,4 +11,6 @@
     <string name="show_support">Show Support?</string>
     <string name="main_menu">Main Menu</string>
     <string name="accuracy">Accuracy</string>
+    <string name="swipe_left_or_right">Swipe right if you are correct, otherwise swipe left.</string>
+    <string name="computer_science_edition">Computer Science Edition</string>
 </resources>

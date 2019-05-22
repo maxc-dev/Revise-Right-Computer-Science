@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private var displayQuestion: TextView? = null
     private var displayAnswer: TextView? = null
     private var tagDisplay: TextView? = null
+    private var swipeHelp: TextView? = null
     private var revealAnswer: Button? = null
     private var progressBar: ProgressBar? = null
     private var fabTTS: FloatingActionButton? = null
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         revealAnswer = findViewById(R.id.revealButton)
         progressBar = findViewById(R.id.progressBarQuestions)
         tagDisplay = findViewById(R.id.tagDisplay)
+        swipeHelp = findViewById(R.id.swipeHelp)
         fabTTS = findViewById(R.id.fabTTS)
 
         textToSpeech = TextToSpeech(this, TextToSpeech.OnInitListener {
@@ -73,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         revealAnswer?.setOnClickListener {
             revealAnswer?.visibility = View.INVISIBLE
             displayAnswer?.visibility = View.VISIBLE
+            swipeHelp?.visibility = View.VISIBLE
         }
 
         val bundle: Bundle? = intent.extras
@@ -102,7 +105,6 @@ class MainActivity : AppCompatActivity() {
                         sampleQuestionsTag.remove(questionSample)
                     } else {
                         //idk if this works
-                        println(" -- -- > EMPTY $tag --- $it")
                         return@forEach
                     }
                 }
@@ -149,6 +151,7 @@ class MainActivity : AppCompatActivity() {
         displayQuestion?.text = currentQuestion?.question
         tagDisplay?.text = currentQuestion?.tag
         revealAnswer?.visibility = View.VISIBLE
+        swipeHelp?.visibility = View.INVISIBLE
         displayAnswer?.visibility = View.INVISIBLE
         displayAnswer?.text = currentQuestion?.answer
     }
