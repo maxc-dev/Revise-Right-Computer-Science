@@ -1,0 +1,5 @@
++ Toggle between swiping left or right
++ Fade animations
++ [P2T4] Systems Life Cycle
++ [P2T5] Databases
+- Similar/Repeated questions

@@ -11,6 +11,10 @@
     <string name="show_support">Show Support?</string>
     <string name="main_menu">Main Menu</string>
     <string name="accuracy">Accuracy</string>
-    <string name="swipe_left_or_right">Swipe right if you are correct, otherwise swipe left.</string>
+    <string name="swipe_right_or_left">Swipe right if you are correct, otherwise swipe left.</string>
+    <string name="swipe_left_or_right">Swipe left if you are correct, otherwise swipe right.</string>
     <string name="computer_science_edition">Computer Science Edition</string>
+    <string name="leave_review">Leave Review</string>
+    <string name="donate">Donate</string>
+    <string name="right">Right</string>
 </resources>

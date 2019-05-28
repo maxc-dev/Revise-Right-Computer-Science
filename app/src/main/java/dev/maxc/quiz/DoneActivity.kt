@@ -1,50 +1,63 @@
 package dev.maxc.quiz
 
 import android.content.Intent
-import android.net.Uri
+import android.content.pm.ActivityInfo
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.widget.Button
 import android.widget.TextView
-import kotlin.math.roundToInt
+import dev.maxc.quiz.deport.Deporter
+import dev.maxc.quiz.deport.Destination
 
+/**
+ * @author Max Carter
+ */
 class DoneActivity : AppCompatActivity() {
 
-    var showSupportButton: Button? = null
-    var mainMenuButton: Button? = null
-    var scoreDisplay: TextView? = null
+    private var reviewButton: Button? = null
+    private var donateButton: Button? = null
+    private var mainMenuButton: Button? = null
+    private var scoreDisplay: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_done)
 
-        showSupportButton = findViewById(R.id.showSupportButton)
+        reviewButton = findViewById(R.id.reviewButton)
         mainMenuButton = findViewById(R.id.mainMenuButton)
+        donateButton = findViewById(R.id.donateButton)
         scoreDisplay = findViewById(R.id.scoreDisplay)
 
         val bundle: Bundle? = intent.extras
         val score = bundle!!.getInt("score")
 
-        val builder = AlertDialog.Builder(this@DoneActivity)
-        builder.setTitle(R.string.show_support)
-        builder.setMessage("Designing all the components of this app, including writing all the (1000+) questions/answers for you, has taken a very long time. Any support is appreciated since I do this for free, whether it's a positive rating or a small donation. Thank you for using this app, and good luck with your exams! :)")
-        builder.setPositiveButton("Hell Yeah") { _, _ -> url() }
+        //0.33 chance of showing a support message
+        if ((1..4).random() == 2) {
+            val builder = AlertDialog.Builder(this@DoneActivity)
+            builder.setTitle(R.string.show_support)
+            builder.setMessage("Thank you for using this app, would you consider leaving a positive review?")
+            builder.setPositiveButton("Review") { _, _ -> Deporter.deport(this, Destination.MARKET) }
+            builder.setNegativeButton("Donate") { _, _ -> Deporter.deport(this, Destination.PAYPAL) }
 
-        val dialog = builder.create()
-        dialog.show()
+            val dialog = builder.create()
+            dialog.show()
+        }
 
         scoreDisplay?.text = "$score%"
 
-        showSupportButton?.setOnClickListener {
-            url()
+        reviewButton?.setOnClickListener {
+            Deporter.deport(this, Destination.MARKET)
+        }
+
+        donateButton?.setOnClickListener {
+            Deporter.deport(this, Destination.PAYPAL)
         }
 
         mainMenuButton?.setOnClickListener {
             startActivity(Intent(this@DoneActivity, Splash::class.java))
         }
     }
-
-    private fun url(url: String = "https://www.paypal.me/mxcrtr") = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 
 }

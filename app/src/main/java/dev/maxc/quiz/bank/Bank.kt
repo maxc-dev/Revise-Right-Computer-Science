@@ -18,6 +18,8 @@ class Bank(private val context: Context) {
     fun collectData() {
         val inStream = context.resources.openRawResource(R.raw.bank)
         jsonString = inStream.bufferedReader().use { it.readText() }
+        inStream.close()
+        jsonString = jsonString.replace("\n", "")
     }
 
     private fun tagExists(tag: String) = jsonString.contains("[$tag]")

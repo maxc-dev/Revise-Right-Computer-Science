@@ -1,16 +1,17 @@
 package dev.maxc.quiz
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.*
 import dev.maxc.quiz.bank.Bank
 import java.util.*
+import dev.maxc.quiz.deport.Deporter
+import dev.maxc.quiz.deport.Destination
+
 
 /**
  * @author Max Carter
@@ -24,9 +25,34 @@ class Splash : AppCompatActivity() {
     private var listTopicsButton: Button? = null
     private var switchUseQuestionCount: Switch? = null
 
+    private val sharedPreferencesName = "revise-right-prefs"
+    private val lastAppVersionUsed = "last-version-used"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_splash)
+
+        val pref = applicationContext.getSharedPreferences(sharedPreferencesName, MODE_PRIVATE)
+        val edit = pref.edit()
+
+        //if the user is in a new version, give them an update
+        if (pref.getString(lastAppVersionUsed, null) != BuildConfig.VERSION_NAME) {
+            edit.putString(lastAppVersionUsed, BuildConfig.VERSION_NAME)
+            edit.apply()
+
+            val inStream = resources.openRawResource(R.raw.patch_notes)
+            val update = inStream.bufferedReader().use { it.readText() }
+            inStream.close()
+
+            val builder = AlertDialog.Builder(this@Splash)
+            builder.setTitle("What's New? (v${BuildConfig.VERSION_NAME})")
+            builder.setMessage(update)
+            builder.setPositiveButton("More") { _, _ -> Deporter.deport(this, Destination.MARKET) }
+
+            val dialog = builder.create()
+            dialog.show()
+        }
 
         questionCountPicker = findViewById(R.id.questionCount)
         topicDisplay = findViewById(R.id.topicDisplay)
