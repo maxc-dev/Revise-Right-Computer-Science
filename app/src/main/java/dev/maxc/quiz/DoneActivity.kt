@@ -14,7 +14,6 @@ import dev.maxc.quiz.deport.Destination
  * @author Max Carter
  */
 class DoneActivity : AppCompatActivity() {
-
     private var reviewButton: Button? = null
     private var donateButton: Button? = null
     private var mainMenuButton: Button? = null
@@ -33,13 +32,14 @@ class DoneActivity : AppCompatActivity() {
         val bundle: Bundle? = intent.extras
         val score = bundle!!.getInt("score")
 
-        //0.33 chance of showing a support message
+        //0.25 chance of showing a support message
         if ((1..4).random() == 2) {
             val builder = AlertDialog.Builder(this@DoneActivity)
             builder.setTitle(R.string.show_support)
             builder.setMessage("Thank you for using this app, would you consider leaving a positive review?")
             builder.setPositiveButton("Review") { _, _ -> Deporter.deport(this, Destination.MARKET) }
-            builder.setNegativeButton("Donate") { _, _ -> Deporter.deport(this, Destination.PAYPAL) }
+            builder.setNeutralButton("Donate") { _, _ -> Deporter.deport(this, Destination.PAYPAL) }
+            builder.setNegativeButton("No") { _, _ -> }
 
             val dialog = builder.create()
             dialog.show()
@@ -56,8 +56,9 @@ class DoneActivity : AppCompatActivity() {
         }
 
         mainMenuButton?.setOnClickListener {
-            startActivity(Intent(this@DoneActivity, Splash::class.java))
+            startActivity(Intent(this@DoneActivity, MenuActivity::class.java))
         }
     }
 
+    override fun onBackPressed() { }
 }

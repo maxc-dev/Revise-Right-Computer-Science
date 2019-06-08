@@ -6,7 +6,7 @@
         android:background="@drawable/gradient"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Splash">
+        tools:context=".MenuActivity">
 
     <TextView
             android:text="@string/app_name"
@@ -38,25 +38,8 @@
             android:id="@+id/launchButton" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:textColor="@color/colorPrimary" android:background="@color/colorAccent" android:textSize="18sp"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/questionCount"
-            app:layout_constraintHorizontal_bias="0.489"/>
-    <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/customQuestionSwitch" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="40dp"
-            android:checked="false"
-            android:layout_marginTop="20dp" app:layout_constraintTop_toBottomOf="@+id/listTopics"/>
-    <TextView
-            android:text="@string/dynamic_question_count"
-            android:enabled="false"
-            android:layout_width="268dp"
-            android:layout_height="30dp"
-            android:id="@+id/questionCountStatus" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toStartOf="@+id/customQuestionSwitch"
-            android:layout_marginEnd="8dp" app:layout_constraintHorizontal_bias="0.596"
-            android:textColor="@color/colorAccent" android:textSize="18sp"
-            android:layout_marginTop="20dp" app:layout_constraintTop_toBottomOf="@+id/listTopics"/>
+            android:layout_marginTop="20dp" app:layout_constraintTop_toBottomOf="@+id/questionCount"
+            app:layout_constraintHorizontal_bias="0.514"/>
     <NumberPicker
             android:divider="@color/colorAccent"
             android:layout_width="83dp"
@@ -65,8 +48,7 @@
             android:theme="@style/NumberPickerTheme"
             android:id="@+id/questionCount" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp" app:layout_constraintTop_toBottomOf="@+id/questionCountStatus"
-    />
+            android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/listTopics"/>
     <TextView
             android:text="@string/no_topics_selected"
             android:layout_width="346dp"
@@ -88,4 +70,14 @@
             app:layout_constraintHorizontal_bias="0.487"
             android:enabled="true"
             android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/topicDisplay"/>
+    <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true" app:srcCompat="@android:drawable/ic_search_category_default"
+            android:id="@+id/fabSearch" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="@+id/textView4" app:layout_constraintHorizontal_bias="0.023"
+            app:layout_constraintVertical_bias="0.987"/>
 </android.support.constraint.ConstraintLayout>

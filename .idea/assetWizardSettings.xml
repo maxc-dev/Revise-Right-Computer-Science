@@ -78,7 +78,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/av/ic_volume_up_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_menu_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -89,7 +89,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="3c3c3c" />
-                            <entry key="outputName" value="volume_on" />
+                            <entry key="outputName" value="go_menu" />
                             <entry key="sourceFile" value="C:\Users\Max" />
                           </map>
                         </option>

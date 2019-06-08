@@ -21,13 +21,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 import android.view.animation.Animation
+import dev.maxc.quiz.pref.SharedPref
 
 
 /**
  * @author Max Carter
  */
 class MainActivity : AppCompatActivity() {
-
     private var x1: Float? = null
     private var x2: Float? = null
 
@@ -41,10 +41,7 @@ class MainActivity : AppCompatActivity() {
     private var fabTTS: FloatingActionButton? = null
     private var fabSwiper: FloatingActionButton? = null
 
-    private var textToSpeech: TextToSpeech? = null
-
     private var currentQuestion: Question? = null
-
     private var questions: ArrayList<Question>? = null
     private var questionsCorrect = 0
     private var questionsAsked = 0
@@ -53,9 +50,8 @@ class MainActivity : AppCompatActivity() {
     private val fadeOut = AlphaAnimation(1.0f, 0.0f).apply { duration = 200 }
 
     private var swipeRightCorrect = true
-
-    private val sharedPreferencesName = "revise-right-prefs"
-    private val swipeRightCorrectPreference = "swipe_right_correct"
+    private val USE_CUSTOM_QUESTION = 1
+    private var textToSpeech: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,16 +98,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val preferences = applicationContext.getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
+        val preferences =
+            applicationContext.getSharedPreferences(SharedPref.sharedPreferencesName, Context.MODE_PRIVATE)
         val edit = preferences.edit()
 
-        swipeRightCorrect = preferences.getBoolean(swipeRightCorrectPreference, true)
+        swipeRightCorrect = preferences.getBoolean(SharedPref.swipeRightCorrect, true)
         swiperPreference(swipeRightCorrect)
 
         fabSwiper?.setOnClickListener {
             swipeRightCorrect = !swipeRightCorrect
             swiperPreference(swipeRightCorrect)
-            edit.putBoolean(swipeRightCorrectPreference, swipeRightCorrect)
+            edit.putBoolean(SharedPref.swipeRightCorrect, swipeRightCorrect)
             edit.apply()
         }
 
@@ -124,39 +121,48 @@ class MainActivity : AppCompatActivity() {
         }
 
         val bundle: Bundle? = intent.extras
-        val tag = bundle!!.getString("tags")
-        val count = bundle.getInt("count")
-
-        val tagList = tag.split("}{")
-
-        val bank = Bank(this)
-        questions = ArrayList()
-
-        val each = count/tagList.size
-
-        if (count == 0) {
-            tagList.shuffled().forEach { tag ->
-                bank.questions(tag)!!.shuffled().forEach {
-                    questions?.add(it)
-                }
-            }
+        val customQuestion = bundle!!.getInt("custom")
+        if (customQuestion == USE_CUSTOM_QUESTION) {
+            questions = ArrayList()
+            val question = Question(
+                bundle.getString("custom-question"),
+                bundle.getString("custom-answer"),
+                bundle.getString("custom-tag")
+            )
+            questions?.add(question)
         } else {
-            tagList.forEach { tag ->
-                val sampleQuestionsTag = bank.questions(tag)
-                repeat(each) {
-                    if (sampleQuestionsTag!!.isNotEmpty()) {
-                        val questionSample = sampleQuestionsTag.random()
-                        questions?.add(questionSample)
-                        sampleQuestionsTag.remove(questionSample)
-                    } else {
-                        //idk if this works
-                        return@forEach
+            val tag = bundle.getString("tags")
+            val count = bundle.getInt("count")
+
+            val tagList = tag.split("}{")
+            val each = count / tagList.size
+
+            val bank = Bank(this)
+            questions = ArrayList()
+
+            if (count == 0) {
+                tagList.shuffled().forEach { subTag ->
+                    bank.questions(subTag)!!.shuffled().forEach {
+                        questions?.add(it)
+                    }
+                }
+            } else {
+                tagList.forEach { subTag ->
+                    val sampleQuestionsTag = bank.questions(subTag)
+                    repeat(each) {
+                        if (sampleQuestionsTag!!.isNotEmpty()) {
+                            val questionSample = sampleQuestionsTag.random()
+                            questions?.add(questionSample)
+                            sampleQuestionsTag.remove(questionSample)
+                        } else {
+                            //idk if this works
+                            return@forEach
+                        }
                     }
                 }
             }
+            questions?.shuffle()
         }
-
-        questions?.shuffle()
         progressBar?.max = questions!!.size
 
         askQuestion()
@@ -182,8 +188,8 @@ class MainActivity : AppCompatActivity() {
     private fun askQuestion() {
         if (questions!!.isEmpty()) {
             //no more questions
-            val score = (questionsCorrect*100)/questionsAsked
-            startActivity(Intent(this@MainActivity, DoneActivity::class.java).apply { putExtra("score" , score) })
+            val score = (questionsCorrect * 100) / questionsAsked
+            startActivity(Intent(this@MainActivity, DoneActivity::class.java).apply { putExtra("score", score) })
             return
         }
         questionsAsked++
@@ -212,7 +218,7 @@ class MainActivity : AppCompatActivity() {
         displayAnswer?.startAnimation(fadeOut)
         swipeHelp?.startAnimation(fadeOut)
         fadeOut.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) { }
+            override fun onAnimationStart(animation: Animation) {}
 
             override fun onAnimationEnd(animation: Animation) {
                 swipeHelp?.visibility = View.INVISIBLE
@@ -220,15 +226,14 @@ class MainActivity : AppCompatActivity() {
                 displayAnswer?.text = currentQuestion?.answer
             }
 
-            override fun onAnimationRepeat(animation: Animation) { }
+            override fun onAnimationRepeat(animation: Animation) {}
         })
     }
 
-    override fun onTouchEvent(touchEvent: MotionEvent) : Boolean {
+    override fun onTouchEvent(touchEvent: MotionEvent): Boolean {
         if (revealAnswer?.visibility == View.VISIBLE) {
             return false
         }
-
         if (touchEvent.action == MotionEvent.ACTION_DOWN) {
             x1 = touchEvent.x
 
@@ -245,12 +250,12 @@ class MainActivity : AppCompatActivity() {
                 swipe(false)
             }
         }
-
         return false
     }
 
     private fun swipe(right: Boolean) {
         textToSpeech?.stop()
+        fabTTS?.setImageResource(R.drawable.volume_on)
         if (right == swipeRightCorrect && questions!!.isNotEmpty()) {
             questionsCorrect++
             progressBar?.progress = questionsCorrect
@@ -260,11 +265,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     object Swipe {
+        fun direction(direction: Boolean): String = if (direction) "right" else "left"
 
-        fun direction(direction: Boolean) : String = if (direction) "right" else "left"
-
-        fun help(direction: Boolean) : String = "Swipe ${direction(direction)} if you are correct, otherwise swipe ${direction(!direction)}."
-
+        fun help(direction: Boolean): String =
+            "Swipe ${direction(direction)} if you are correct, otherwise swipe ${direction(!direction)}."
     }
-
 }

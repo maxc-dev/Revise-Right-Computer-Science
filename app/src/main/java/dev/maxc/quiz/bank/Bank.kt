@@ -8,7 +8,6 @@ import dev.maxc.quiz.R
  * @author Max Carter
  */
 class Bank(private val context: Context) {
-
     private var jsonString = ""
 
     init {
@@ -26,13 +25,20 @@ class Bank(private val context: Context) {
 
     private fun tagEmpty(tag: String) = jsonString.contains("\"[$tag]\":{}")
 
+    fun allQuestions() : ArrayList<Question> {
+        val questions = ArrayList<Question>()
+        for (tag in tags()) {
+            questions.addAll(questions(tag)!!)
+        }
+        return questions
+    }
+
     fun questions(tag: String) : ArrayList<Question>? {
         return when {
             tagEmpty(tag) -> null
             !tagExists(tag) -> null
             else -> {
                 val questions = ArrayList<Question>()
-
                 val condensed = jsonString.substringAfter("[$tag]\":{").substringBefore("}")
                 for (text in condensed.split("\",\"")) {
                     questions.add(Question(
@@ -42,7 +48,6 @@ class Bank(private val context: Context) {
                         )
                     )
                 }
-
                 questions
             }
         }
@@ -58,7 +63,6 @@ class Bank(private val context: Context) {
 
     fun tags() : ArrayList<String> {
         val tags = ArrayList<String>()
-
         val matches = Regex("\\[[A-Za-z0-9 ]{1,64}\\]").findAll(jsonString)
         matches.forEach { matchResult ->
             val tag = matchResult.value.replace("[", "").replace("]", "")
@@ -66,8 +70,6 @@ class Bank(private val context: Context) {
                 tags.add(tag)
             }
         }
-
         return tags
     }
-
 }
