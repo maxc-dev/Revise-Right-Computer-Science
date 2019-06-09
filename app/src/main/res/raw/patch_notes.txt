@@ -1,7 +1,2 @@
-+ Search Questions
-+ [P2T3] Logic
-+ [P2T7] Functional Programming
-+ More [P2T2] Questions
-+ More [P2T6] Questions
-* Volume Button UI Fix
-* Question Count Selector
+* [P2T2] Computer Systems Architecture
+* [P2T6] Networks & Communications

@@ -2,9 +2,7 @@
     <string name="app_name">Revise Right</string>
     <string name="select_a_question_tag">Select a Question Tag</string>
     <string name="reveal_answer">Reveal Answer</string>
-    <string name="using_custom_question_count">Using custom question count</string>
     <string name="launch">Launch</string>
-    <string name="dynamic_question_count">Using dynamic question count</string>
     <string name="select_topics">Select Topics</string>
     <string name="no_topics_selected">No topics selected</string>
     <string name="no_more_questions">No More Questions</string>
@@ -17,4 +15,6 @@
     <string name="leave_review">Leave Review</string>
     <string name="donate">Donate</string>
     <string name="right">Right</string>
+    <string name="sample_question">Sample Question</string>
+    <string name="sample_topic">Sample Topic</string>
 </resources>

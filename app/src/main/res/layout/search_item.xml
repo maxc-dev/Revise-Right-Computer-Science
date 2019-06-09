@@ -16,7 +16,7 @@
                 android:id="@+id/questionTitle"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:text="Line 1"
+                android:text="@string/sample_question"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -25,11 +25,11 @@
                 android:id="@+id/questionTopic"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:text="Line 2"
+                android:text="@string/sample_topic"
                 android:textColor="@color/colorPrimary"
                 android:textSize="13sp"
                 android:layout_alignTop="@+id/questionTitle"
-                android:textStyle="italic" android:layout_marginTop="30dp"/>
+                android:textStyle="italic" android:layout_marginTop="30dp" android:textAllCaps="true"/>
 
     </RelativeLayout>
 
