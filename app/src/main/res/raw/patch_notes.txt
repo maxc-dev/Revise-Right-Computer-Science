@@ -1,1 +1,2 @@
-* Typos
+* Security Updates
++ COMING SOON: Shuffler (New version with more functionality!)
