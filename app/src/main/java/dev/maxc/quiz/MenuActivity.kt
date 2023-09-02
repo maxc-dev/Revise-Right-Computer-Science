@@ -99,7 +99,7 @@ class MenuActivity : AppCompatActivity() {
     private fun updateNumberPicker(min: Int, max: Int) {
         questionCountPicker?.minValue = min
         questionCountPicker?.maxValue = max
-        questionCountPicker?.value = max/2
+        questionCountPicker?.value = max
     }
 
     private fun toggleSwitch(isChecked: Boolean) {
